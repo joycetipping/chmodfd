@@ -1,0 +1,31 @@
+chmodfd - chmod files and directories separately
+
+USAGE:
+
+  chmodfd [options]... [PATH]
+
+DESCRIPTION:
+
+  Recursively chmods PATH (current directory by default), setting
+  file permissions to FMASK and directory permissions to DMASK. By
+  default, it chmods all files first and then all directories; this
+  can be reversed by using the B<-D> flag.
+
+OPTIONS:
+
+  -f=FMASK
+  Specifies the file permission mask. Default value is 644.
+
+  -d=DMASK
+  Specifies the directory permission mask. Default value is 755.
+
+  -D
+  Chmod directories before files. Usually, it won't matter
+  whether the files or the directories come first. However, in
+  cases when the executable bit is being added back to the
+  directories, the script will not be able to access the files
+  until the directories permissions are changed.
+
+AUTHOR
+
+  Joyce Tipping <joyce@joycetipping.com>
