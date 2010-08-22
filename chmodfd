@@ -1,0 +1,68 @@
+#!/usr/bin/perl
+
+use Getopt::Long qw(:config no_ignore_case);
+
+# Options
+my $dfirst = 0;
+my $fmask  = 644;
+my $dmask  = 755;
+
+my $result = GetOptions ( "D"   => \$dfirst,
+                          "f=i" => \$fmask,
+                          "d=i" => \$dmask  );
+# Path
+my $path = $ARGV[0] || "./";
+
+print "$dfirst\n$fmask\n$dmask\n$path\n";
+
+# (The extra backslash is to escape the backslash in perl so that it appears in the bash call)
+if ($dfirst) {
+  # chmod directories first
+  system ("find $path -type d -exec chmod $dmask '{}' \\;");
+  system ("find $path -type f -exec chmod $fmask '{}' \\;");
+
+} else {
+  # default: chmod files first
+  system ("find $path -type f -exec chmod $fmask '{}' \\;");
+  system ("find $path -type d -exec chmod $dmask '{}' \\;");
+}
+
+__END__
+
+=head1 NAME
+
+chmodfd - chmod files and directories separately
+
+=head1 SYNOPSYS
+
+chmodfd [options]... [PATH]
+
+=head1 DESCRIPTION
+
+Recursively chmods PATH (current directory by default), setting file permissions to FMASK and directory permissions to DMASK. By default, it chmods
+all files first and then all directories; this can be reversed by using the B<-D> flag.
+
+=head1 OPTIONS
+
+=over 2
+
+=item B<-f=FMASK>
+
+Specifies the file permission mask. Default value is 644.
+
+=item B<-d=DMASK>
+
+Specifies the directory permission mask. Default value is 755.
+
+=item B<-D>
+
+Chmod directories before files. Usually, it won't matter whether the files or the directories come first. However, in cases when the executable bit is
+being added back to the directories, the script will not be able to access the files until the directories permissions are changed.
+
+=back
+
+=head1 AUTHOR
+
+Joyce Tipping <joyce@joycetipping.com>
+
+=cut
