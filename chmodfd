@@ -13,7 +13,7 @@ my $result = GetOptions ( "D"   => \$dfirst,
 # Path
 my $path = $ARGV[0] || "./";
 
-print "$dfirst\n$fmask\n$dmask\n$path\n";
+#print "$dfirst\n$fmask\n$dmask\n$path\n";
 
 # (The extra backslash is to escape the backslash in perl so that it appears in the bash call)
 if ($dfirst) {
