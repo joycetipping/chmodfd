@@ -10,21 +10,23 @@ my $dmask  = 755;
 my $result = GetOptions ( "D"   => \$dfirst,
                           "f=i" => \$fmask,
                           "d=i" => \$dmask  );
-# Path
-my $path = $ARGV[0] || "./";
 
 #print "$dfirst\n$fmask\n$dmask\n$path\n";
 
-# (The extra backslash is to escape the backslash in perl so that it appears in the bash call)
-if ($dfirst) {
-  # chmod directories first
-  system ("find $path -type d -exec chmod $dmask '{}' \\;");
-  system ("find $path -type f -exec chmod $fmask '{}' \\;");
+for my $path (@ARGV) {
+  $path = $path || './';
 
-} else {
-  # default: chmod files first
-  system ("find $path -type f -exec chmod $fmask '{}' \\;");
-  system ("find $path -type d -exec chmod $dmask '{}' \\;");
+  # (The extra backslash is to escape the backslash in perl so that it appears in the bash call)
+  if ($dfirst) {
+    # chmod directories first
+    system ("find $path -type d -exec chmod $dmask '{}' \\;");
+    system ("find $path -type f -exec chmod $fmask '{}' \\;");
+
+  } else {
+    # default: chmod files first
+    system ("find $path -type f -exec chmod $fmask '{}' \\;");
+    system ("find $path -type d -exec chmod $dmask '{}' \\;");
+  }
 }
 
 __END__
